@@ -2,75 +2,231 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Laporan Rekapitulasi Surat Masuk - BPKAD Kota Pekanbaru</title>
+    <title>Buku Agenda & Rekapitulasi Surat Masuk - BPKAD Kota Pekanbaru</title>
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; color: #1f2937; margin: 15px; }
-        .kop { text-align: center; border-bottom: 2px solid #1A3A5C; padding-bottom: 8px; margin-bottom: 16px; }
-        .kop h3 { margin: 0; font-size: 14px; text-transform: uppercase; color: #1A3A5C; }
-        .kop h2 { margin: 2px 0; font-size: 16px; font-weight: bold; }
-        .kop p { margin: 0; font-size: 10px; color: #4b5563; }
-        .title { text-align: center; margin-bottom: 14px; }
-        .title h4 { margin: 0; font-size: 13px; text-decoration: underline; }
-        .title p { margin: 2px 0 0 0; font-size: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th { background-color: #1A3A5C; color: #ffffff; padding: 6px 4px; font-size: 10px; border: 1px solid #1A3A5C; text-align: center; }
-        td { border: 1px solid #cbd5e1; padding: 5px 4px; vertical-align: top; font-size: 10px; }
-        tr:nth-child(even) { background-color: #f8fafc; }
-        .badge { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: bold; }
-        .ttd-box { width: 35%; float: right; text-align: center; margin-top: 25px; }
+        @page {
+            margin: 20px 25px 30px 25px;
+            size: a4 landscape;
+        }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            color: #1e293b;
+            line-height: 1.3;
+        }
+        .kop-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: 3px double #0f2d4a;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+        .kop-table td {
+            border: none;
+            padding: 0;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .kop-text h4 {
+            margin: 0;
+            font-size: 11.5px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #334155;
+        }
+        .kop-text h2 {
+            margin: 2px 0;
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f2d4a;
+            letter-spacing: 0.5px;
+        }
+        .kop-text h3 {
+            margin: 1px 0;
+            font-size: 12px;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+        .kop-text p {
+            margin: 2px 0 0 0;
+            font-size: 9px;
+            color: #475569;
+        }
+        .report-header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .report-header h3 {
+            margin: 0;
+            font-size: 12.5px;
+            font-weight: bold;
+            text-decoration: underline;
+            color: #0f2d4a;
+        }
+        .report-header p {
+            margin: 3px 0 0 0;
+            font-size: 9px;
+            color: #475569;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        table.data-table th {
+            background-color: #0f2d4a;
+            color: #ffffff;
+            font-size: 9.5px;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px 4px;
+            border: 1px solid #0f2d4a;
+            text-transform: uppercase;
+        }
+        table.data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 5px 6px;
+            vertical-align: top;
+            font-size: 9px;
+        }
+        table.data-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .total-row {
+            background-color: #e2e8f0 !important;
+            font-weight: bold;
+            font-size: 9.5px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 5px;
+            font-size: 8px;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        .badge-arsip { background-color: #dcfce7; color: #166534; }
+        .badge-proses { background-color: #fef3c7; color: #92400e; }
+        .badge-setuju { background-color: #e0f2fe; color: #075985; }
+        .badge-koreksi { background-color: #fee2e2; color: #991b1b; }
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .footer-table td {
+            border: none;
+            padding: 0;
+            vertical-align: top;
+            font-size: 9.5px;
+        }
     </style>
 </head>
 <body>
-    <div class="kop">
-        <h3>Pemerintah Kota Pekanbaru</h3>
-        <h2>BADAN PENGELOLA KEUANGAN DAN ASET DAERAH</h2>
-        <p>Sub Bidang Aset | Jalan Abdul Rahman Hamid, Komplek Perkantoran Tenayan Raya, Pekanbaru</p>
+
+    <!-- KOP RESMI -->
+    <table class="kop-table">
+        <tr>
+            <td class="kop-text">
+                <h4>PEMERINTAH KOTA PEKANBARU</h4>
+                <h2>BADAN PENGELOLA KEUANGAN DAN ASET DAERAH</h2>
+                <h3>SUB BIDANG ASET</h3>
+                <p>Jalan Abdul Rahman Hamid, Komplek Perkantoran Tenayan Raya, Gedung B3, Kota Pekanbaru, Riau<br>Email: bpkad@pekanbaru.go.id | Sistem Informasi Manajemen Surat (SIMANSUR)</p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="report-header">
+        <h3>BUKU AGENDA & REKAPITULASI SURAT MASUK</h3>
+        <p>Periode: <b>{{ $startDate }}</b> s.d. <b>{{ $endDate }}</b> &nbsp;|&nbsp; Dicetak oleh: <b>{{ $user->nama_lengkap }}</b> ({{ strtoupper($user->role) }}) &nbsp;|&nbsp; Tanggal Cetak: {{ date('d/m/Y H:i') }} WIB</p>
     </div>
 
-    <div class="title">
-        <h4>BUKU AGENDA & REKAPITULASI SURAT MASUK</h4>
-        <p>Periode: {{ $startDate }} s.d. {{ $endDate }} | Dicetak oleh: {{ $user->nama_lengkap }} ({{ strtoupper($user->role) }})</p>
-    </div>
-
-    <table>
+    <table class="data-table">
         <thead>
             <tr>
-                <th width="4%">No</th>
-                <th width="12%">No. Agenda</th>
-                <th width="14%">No. Surat</th>
-                <th width="8%">Tgl Terima</th>
-                <th width="16%">OPD Pengirim</th>
-                <th width="24%">Perihal</th>
-                <th width="8%">Bidang</th>
-                <th width="6%">Sifat</th>
-                <th width="8%">Status</th>
+                <th width="3%">NO</th>
+                <th width="12%">NO. AGENDA</th>
+                <th width="14%">NO. SURAT</th>
+                <th width="8%">TGL TERIMA</th>
+                <th width="17%">ASAL PENGIRIM</th>
+                <th width="24%">PERIHAL SURAT</th>
+                <th width="7%">BIDANG</th>
+                <th width="6%">SIFAT</th>
+                <th width="9%">STATUS</th>
             </tr>
         </thead>
         <tbody>
             @forelse($items as $index => $item)
             <tr>
                 <td align="center">{{ $index + 1 }}</td>
-                <td><b>{{ $item->no_agenda }}</b></td>
-                <td>{{ $item->no_surat }}<br><small style="color:#64748b;">Tgl: {{ $item->tanggal_surat ? $item->tanggal_surat->format('d/m/Y') : '-' }}</small></td>
+                <td align="center"><b style="color:#0f2d4a;">{{ $item->no_agenda }}</b></td>
+                <td>
+                    <b>{{ $item->no_surat }}</b><br>
+                    <span style="color:#64748b; font-size:8.5px;">Tgl Surat: {{ $item->tanggal_surat ? $item->tanggal_surat->format('d/m/Y') : '-' }}</span>
+                </td>
                 <td align="center">{{ $item->tanggal_terima ? $item->tanggal_terima->format('d/m/Y') : '-' }}</td>
-                <td>{{ $item->opd_asal }}</td>
+                <td><b>{{ $item->opd_asal }}</b></td>
                 <td>{{ $item->perihal }}</td>
-                <td align="center">{{ ucfirst($item->bidang_tujuan) }}</td>
-                <td align="center">{{ ucfirst($item->sifat) }}</td>
-                <td align="center"><b>{{ strtoupper(str_replace('_', ' ', $item->status)) }}</b></td>
+                <td align="center"><b>{{ strtoupper($item->bidang_tujuan) }}</b></td>
+                <td align="center">{{ strtoupper($item->sifat) }}</td>
+                <td align="center">
+                    @php
+                        $st = $item->status;
+                        $badgeClass = 'badge-proses';
+                        if ($st === 'diarsipkan') $badgeClass = 'badge-arsip';
+                        elseif (str_contains($st, 'disetujui') || str_contains($st, 'terverifikasi')) $badgeClass = 'badge-setuju';
+                        elseif (str_contains($st, 'koreksi') || str_contains($st, 'ditolak')) $badgeClass = 'badge-koreksi';
+                    @endphp
+                    <span class="badge {{ $badgeClass }}">
+                        {{ strtoupper(str_replace('_', ' ', $st)) }}
+                    </span>
+                </td>
             </tr>
             @empty
             <tr>
-                <td colspan="9" align="center">Tidak ada data surat masuk untuk kriteria ini.</td>
+                <td colspan="9" align="center" style="padding:15px; color:#64748b;">
+                    <em>Tidak ditemukan data persuratan masuk pada rentang filter yang dipilih.</em>
+                </td>
             </tr>
             @endforelse
+            @if(count($items) > 0)
+            <tr class="total-row">
+                <td colspan="8" align="right" style="padding:6px 10px;">TOTAL DATA SURAT MASUK:</td>
+                <td align="center" style="padding:6px 10px;"><b>{{ count($items) }} Dokumen</b></td>
+            </tr>
+            @endif
         </tbody>
     </table>
 
-    <div class="ttd-box">
-        <p>Pekanbaru, {{ date('d F Y') }}<br>Kepala Bidang Aset</p>
-        <div style="height: 45px;"></div>
-        <p><b>Drs. H. Ahmad Fauzi, M.Si</b><br>NIP. 19750812 199803 1 002</p>
-    </div>
+    <table class="footer-table">
+        <tr>
+            <td width="65%">
+                <p style="margin:0; font-size:8.5px; color:#64748b;">
+                    * Dokumen rekapitulasi ini dicetak secara otomatis melalui aplikasi SIMANSUR BPKAD Kota Pekanbaru.<br>
+                    * Sumber kebenaran fisik merujuk pada berkas dokumen scan asli yang tersimpan dalam sistem.
+                </p>
+            </td>
+            <td width="35%" align="center">
+                <p style="margin:0;">Pekanbaru, {{ date('d F Y') }}<br>Kepala Bidang Aset,</p>
+                <div style="height: 48px;"></div>
+                <p style="margin:0;">
+                    <b>Drs. H. Ahmad Fauzi, M.Si</b><br>
+                    NIP. 19750812 199803 1 002
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <script type="text/php">
+        if (isset($pdf)) {
+            $x = 750;
+            $y = 565;
+            $text = "Halaman {PAGE_NUM} dari {PAGE_COUNT}";
+            $font = $fontMetrics->get_font("Helvetica", "normal");
+            $size = 8;
+            $color = array(0.4, 0.4, 0.4);
+            $pdf->page_text($x, $y, $text, $font, $size, $color);
+        }
+    </script>
 </body>
 </html>

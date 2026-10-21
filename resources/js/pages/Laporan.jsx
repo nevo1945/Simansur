@@ -13,7 +13,7 @@ import {
   FileSpreadsheet,
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
-import { getRekapitulasi, getExportPdfUrl, getExportCsvUrl } from '../api/laporan';
+import { getRekapitulasi, getExportPdfUrl, getExportExcelUrl, getExportCsvUrl } from '../api/laporan';
 import Breadcrumb from '../components/layout/Breadcrumb';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -52,16 +52,20 @@ export default function Laporan() {
     const url = getExportPdfUrl(type, {
       start_date: startDate,
       end_date: endDate,
-      bidang_tujuan: bidangFilter || undefined,
+      bidang_tujuan: activeTab === 'surat_masuk' ? (bidangFilter || undefined) : undefined,
+      sifat: sifatFilter || undefined,
+      stream: '1',
     });
     window.open(url, '_blank');
   };
 
-  const handleExportCsv = () => {
+  const handleExportExcel = () => {
     const type = activeTab === 'surat_masuk' ? 'surat-masuk' : 'surat-keluar';
-    const url = getExportCsvUrl(type, {
+    const url = getExportExcelUrl(type, {
       start_date: startDate,
       end_date: endDate,
+      bidang_tujuan: activeTab === 'surat_masuk' ? (bidangFilter || undefined) : undefined,
+      sifat: sifatFilter || undefined,
     });
     window.location.href = url;
   };
@@ -78,9 +82,9 @@ export default function Laporan() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" icon={FileSpreadsheet} onClick={handleExportCsv}>
-            Ekspor Excel (CSV)
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" icon={FileSpreadsheet} onClick={handleExportExcel}>
+            Ekspor Excel (.xlsx)
           </Button>
           <Button variant="primary" size="sm" icon={Printer} onClick={handleExportPdf}>
             Cetak PDF Resmi

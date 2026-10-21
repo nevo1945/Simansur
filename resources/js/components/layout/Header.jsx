@@ -83,18 +83,24 @@ export default function Header({ toggleSidebar, isSidebarCollapsed }) {
 
   return (
     <header className="sticky top-0 z-30 gov-header-glass">
-      <div className="flex items-center justify-between px-4 sm:px-6 h-16">
+      <div className="flex items-center justify-between px-3 sm:px-6 h-16 gap-2">
         {/* Left: Branding & Search */}
-        <div className="flex items-center gap-4 flex-1 max-w-xl">
+        <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0 max-w-xl">
           <button
             onClick={toggleSidebar}
             aria-label="Toggle Sidebar"
-            className="p-2 text-slate-500 hover:text-primary hover:bg-slate-100 rounded-btn transition-colors"
+            className="p-2 text-slate-600 hover:text-primary hover:bg-slate-100 rounded-btn transition-colors shrink-0"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+
+          {/* Mobile App Identity */}
+          <div className="flex items-center gap-2 lg:hidden truncate">
+            <span className="text-xs font-black text-primary tracking-wider uppercase">SIMANSUR</span>
+            <span className="text-[10px] text-slate-400 hidden xs:inline">• BPKAD ASET</span>
+          </div>
 
           <form onSubmit={handleSearch} className="hidden sm:block relative w-full max-w-sm">
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
@@ -109,7 +115,7 @@ export default function Header({ toggleSidebar, isSidebarCollapsed }) {
         </div>
 
         {/* Right: Notifications & User Profile */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Notifications Popover */}
           <div className="relative" ref={notifRef}>
             <button
@@ -126,7 +132,7 @@ export default function Header({ toggleSidebar, isSidebarCollapsed }) {
             </button>
 
             {isNotifOpen && (
-              <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-card shadow-gov-modal border border-slate-200 overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 w-[calc(100vw-24px)] max-w-sm sm:w-96 bg-white rounded-card shadow-gov-modal border border-slate-200 overflow-hidden z-50">
                 <div className="flex items-center justify-between px-4 py-3 bg-slate-50 border-b border-slate-100">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-slate-800">Notifikasi Masuk</span>
@@ -211,7 +217,7 @@ export default function Header({ toggleSidebar, isSidebarCollapsed }) {
             </button>
 
             {isUserMenuOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-card shadow-gov-modal border border-slate-200 overflow-hidden z-50 py-1.5">
+              <div className="absolute right-0 mt-2 w-[calc(100vw-24px)] max-w-xs sm:w-64 bg-white rounded-card shadow-gov-modal border border-slate-200 overflow-hidden z-50 py-1.5">
                 <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/60">
                   <p className="text-xs font-bold text-slate-900">{user?.nama_lengkap}</p>
                   <p className="text-[11px] text-slate-500 mt-0.5">NIP: {user?.nip || '-'}</p>

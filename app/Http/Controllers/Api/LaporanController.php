@@ -7,6 +7,7 @@ use App\Models\SuratMasuk;
 use App\Models\SuratKeluar;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use App\Services\ExcelExportService;
 
 class LaporanController extends Controller
 {
@@ -96,6 +97,10 @@ class LaporanController extends Controller
             $query->whereBetween('tanggal_terima', [$request->start_date, $request->end_date]);
         }
 
+        if ($request->filled('sifat')) {
+            $query->where('sifat', $request->sifat);
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -105,12 +110,17 @@ class LaporanController extends Controller
         $html = view('exports.laporan_surat_masuk', [
             'items' => $items,
             'user' => $user,
-            'startDate' => $request->start_date ?? date('Y-m-01'),
-            'endDate' => $request->end_date ?? date('Y-m-d'),
+            'startDate' => $request->start_date ? date('d/m/Y', strtotime($request->start_date)) : date('01/m/Y'),
+            'endDate' => $request->end_date ? date('d/m/Y', strtotime($request->end_date)) : date('d/m/Y'),
         ])->render();
 
         $pdf = Pdf::loadHTML($html)->setPaper('a4', 'landscape');
-        return $pdf->download('Laporan_Surat_Masuk_BPKAD_' . date('Ymd_His') . '.pdf');
+        $filename = 'Laporan_Surat_Masuk_BPKAD_' . date('Ymd_His') . '.pdf';
+
+        if ($request->boolean('stream')) {
+            return $pdf->stream($filename);
+        }
+        return $pdf->download($filename);
     }
 
     public function exportPdfSuratKeluar(Request $request)
@@ -124,6 +134,10 @@ class LaporanController extends Controller
             $query->whereBetween('tanggal_surat', [$request->start_date, $request->end_date]);
         }
 
+        if ($request->filled('sifat')) {
+            $query->where('sifat', $request->sifat);
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -133,12 +147,17 @@ class LaporanController extends Controller
         $html = view('exports.laporan_surat_keluar', [
             'items' => $items,
             'user' => $user,
-            'startDate' => $request->start_date ?? date('Y-m-01'),
-            'endDate' => $request->end_date ?? date('Y-m-d'),
+            'startDate' => $request->start_date ? date('d/m/Y', strtotime($request->start_date)) : date('01/m/Y'),
+            'endDate' => $request->end_date ? date('d/m/Y', strtotime($request->end_date)) : date('d/m/Y'),
         ])->render();
 
         $pdf = Pdf::loadHTML($html)->setPaper('a4', 'landscape');
-        return $pdf->download('Laporan_Surat_Keluar_BPKAD_' . date('Ymd_His') . '.pdf');
+        $filename = 'Laporan_Surat_Keluar_BPKAD_' . date('Ymd_His') . '.pdf';
+
+        if ($request->boolean('stream')) {
+            return $pdf->stream($filename);
+        }
+        return $pdf->download($filename);
     }
 
     public function cetakDisposisi($id, Request $request)
@@ -155,7 +174,7 @@ class LaporanController extends Controller
         return $pdf->stream('Lembar_Disposisi_' . str_replace('/', '_', $surat->no_agenda) . '.pdf');
     }
 
-    public function exportCsvSuratMasuk(Request $request)
+    public function exportExcelSuratMasuk(Request $request, ExcelExportService $excelService)
     {
         $user = $request->user();
         $this->checkAccess($user);
@@ -163,46 +182,31 @@ class LaporanController extends Controller
         $query = SuratMasuk::query();
         if ($user->isKasubid()) {
             $query->where('bidang_tujuan', $user->bidang);
+        } elseif ($request->filled('bidang_tujuan')) {
+            $query->where('bidang_tujuan', $request->bidang_tujuan);
         }
+
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('tanggal_terima', [$request->start_date, $request->end_date]);
         }
+
+        if ($request->filled('sifat')) {
+            $query->where('sifat', $request->sifat);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         $items = $query->orderBy('no_agenda')->get();
 
-        $headers = [
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=Rekap_Surat_Masuk_" . date('Ymd') . ".csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        ];
+        $startDate = $request->start_date ? date('d/m/Y', strtotime($request->start_date)) : date('01/m/Y');
+        $endDate = $request->end_date ? date('d/m/Y', strtotime($request->end_date)) : date('d/m/Y');
 
-        $columns = ['No Agenda', 'No Surat', 'Tanggal Surat', 'Tanggal Terima', 'OPD Asal', 'Perihal', 'Sifat', 'Bidang Tujuan', 'Status'];
-
-        $callback = function () use ($items, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($items as $item) {
-                fputcsv($file, [
-                    $item->no_agenda,
-                    $item->no_surat,
-                    $item->tanggal_surat ? $item->tanggal_surat->format('Y-m-d') : '',
-                    $item->tanggal_terima ? $item->tanggal_terima->format('Y-m-d') : '',
-                    $item->opd_asal,
-                    $item->perihal,
-                    strtoupper($item->sifat),
-                    strtoupper($item->bidang_tujuan),
-                    strtoupper(str_replace('_', ' ', $item->status)),
-                ]);
-            }
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return $excelService->exportSuratMasuk($items, $startDate, $endDate, $user);
     }
 
-    public function exportCsvSuratKeluar(Request $request)
+    public function exportExcelSuratKeluar(Request $request, ExcelExportService $excelService)
     {
         $user = $request->user();
         $this->checkAccess($user);
@@ -211,37 +215,30 @@ class LaporanController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('tanggal_surat', [$request->start_date, $request->end_date]);
         }
+
+        if ($request->filled('sifat')) {
+            $query->where('sifat', $request->sifat);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         $items = $query->orderBy('no_agenda')->get();
 
-        $headers = [
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=Rekap_Surat_Keluar_" . date('Ymd') . ".csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        ];
+        $startDate = $request->start_date ? date('d/m/Y', strtotime($request->start_date)) : date('01/m/Y');
+        $endDate = $request->end_date ? date('d/m/Y', strtotime($request->end_date)) : date('d/m/Y');
 
-        $columns = ['No Agenda', 'No Surat', 'Tanggal Surat', 'OPD Tujuan', 'Perihal', 'Sifat', 'Jenis Dokumen', 'Status'];
+        return $excelService->exportSuratKeluar($items, $startDate, $endDate, $user);
+    }
 
-        $callback = function () use ($items, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
+    public function exportCsvSuratMasuk(Request $request, ExcelExportService $excelService)
+    {
+        return $this->exportExcelSuratMasuk($request, $excelService);
+    }
 
-            foreach ($items as $item) {
-                fputcsv($file, [
-                    $item->no_agenda,
-                    $item->no_surat,
-                    $item->tanggal_surat ? $item->tanggal_surat->format('Y-m-d') : '',
-                    $item->opd_tujuan,
-                    $item->perihal,
-                    strtoupper($item->sifat),
-                    strtoupper(str_replace('_', ' ', $item->jenis_dokumen)),
-                    strtoupper(str_replace('_', ' ', $item->status)),
-                ]);
-            }
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+    public function exportCsvSuratKeluar(Request $request, ExcelExportService $excelService)
+    {
+        return $this->exportExcelSuratKeluar($request, $excelService);
     }
 }

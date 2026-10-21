@@ -92,6 +92,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/laporan/rekapitulasi', [LaporanController::class, 'rekapitulasi']);
         Route::get('/laporan/surat-masuk/pdf', [LaporanController::class, 'exportPdfSuratMasuk']);
         Route::get('/laporan/surat-keluar/pdf', [LaporanController::class, 'exportPdfSuratKeluar']);
+        Route::get('/laporan/surat-masuk/excel', [LaporanController::class, 'exportExcelSuratMasuk']);
+        Route::get('/laporan/surat-keluar/excel', [LaporanController::class, 'exportExcelSuratKeluar']);
         Route::get('/laporan/surat-masuk/csv', [LaporanController::class, 'exportCsvSuratMasuk']);
         Route::get('/laporan/surat-keluar/csv', [LaporanController::class, 'exportCsvSuratKeluar']);
     });

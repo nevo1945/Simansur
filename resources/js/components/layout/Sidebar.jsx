@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Inbox, Send, Users, FileBarChart, History, Shield, Building2 } from 'lucide-react';
+import { LayoutDashboard, Inbox, Send, Users, FileBarChart, History, Shield, Building2, X } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { clsx } from 'clsx';
 
-export default function Sidebar({ isCollapsed }) {
+export default function Sidebar({ isCollapsed, isMobileOpen, onCloseMobile }) {
   const { user } = useAuthStore();
 
   const navItems = [
@@ -51,21 +51,36 @@ export default function Sidebar({ isCollapsed }) {
   return (
     <aside
       className={clsx(
-        'fixed inset-y-0 left-0 z-40 bg-[#1A3A5C] text-white flex flex-col transition-all duration-300 shadow-xl border-r border-[#12273e]',
-        isCollapsed ? 'w-[72px]' : 'w-[260px]'
+        'fixed inset-y-0 left-0 z-50 bg-[#1A3A5C] text-white flex flex-col transition-all duration-300 shadow-2xl border-r border-[#12273e]',
+        // Mobile behavior: off-canvas drawer
+        'w-72 max-w-[85vw]',
+        isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+        // Desktop behavior: fixed width based on collapsed state
+        isCollapsed ? 'lg:w-[72px]' : 'lg:w-[260px]'
       )}
     >
       {/* Brand Header */}
-      <div className="h-16 flex items-center gap-3 px-4 border-b border-[#244e7c]/60 bg-[#142d47]">
-        <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center shrink-0 shadow-sm text-slate-900 font-black">
-          <Building2 className="w-5 h-5 text-slate-900" />
-        </div>
-        {!isCollapsed && (
-          <div className="truncate">
-            <h1 className="text-sm font-black tracking-wider text-white">SIMANSUR</h1>
-            <p className="text-[10px] text-amber-300/90 font-medium truncate">BPKAD Aset Kota Pekanbaru</p>
+      <div className="h-16 flex items-center justify-between gap-3 px-4 border-b border-[#244e7c]/60 bg-[#142d47]">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center shrink-0 shadow-sm text-slate-900 font-black">
+            <Building2 className="w-5 h-5 text-slate-900" />
           </div>
-        )}
+          {(!isCollapsed || isMobileOpen) && (
+            <div className="truncate">
+              <h1 className="text-sm font-black tracking-wider text-white">SIMANSUR</h1>
+              <p className="text-[10px] text-amber-300/90 font-medium truncate">BPKAD Aset Kota Pekanbaru</p>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Close Button */}
+        <button
+          onClick={onCloseMobile}
+          className="p-1.5 text-slate-300 hover:text-white rounded-lg hover:bg-[#244e7c] lg:hidden transition-colors"
+          aria-label="Tutup Menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation Links */}
@@ -76,7 +91,8 @@ export default function Sidebar({ isCollapsed }) {
             <NavLink
               key={item.to}
               to={item.to}
-              title={isCollapsed ? item.label : undefined}
+              onClick={onCloseMobile}
+              title={isCollapsed && !isMobileOpen ? item.label : undefined}
               className={({ isActive }) =>
                 clsx(
                   'flex items-center gap-3 px-3 py-2.5 rounded-btn text-xs font-semibold transition-all duration-150',
@@ -87,7 +103,7 @@ export default function Sidebar({ isCollapsed }) {
               }
             >
               <Icon className="w-5 h-5 shrink-0" />
-              {!isCollapsed && <span className="truncate">{item.label}</span>}
+              {(!isCollapsed || isMobileOpen) && <span className="truncate">{item.label}</span>}
             </NavLink>
           );
         })}
@@ -95,7 +111,7 @@ export default function Sidebar({ isCollapsed }) {
 
       {/* Footer Institution Identity */}
       <div className="p-3 border-t border-[#244e7c]/50 bg-[#12273e]">
-        {!isCollapsed ? (
+        {!isCollapsed || isMobileOpen ? (
           <div className="text-[11px] text-slate-400">
             <p className="font-semibold text-slate-300">Pemerintah Kota Pekanbaru</p>
             <p className="text-[10px] text-slate-500 mt-0.5">Sub Bidang Aset BMD</p>

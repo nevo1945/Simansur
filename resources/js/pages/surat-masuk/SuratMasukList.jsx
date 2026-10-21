@@ -220,98 +220,169 @@ export default function SuratMasukList() {
             onAction={() => window.location.assign('/surat-masuk/buat')}
           />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
-                  <th className="py-3 px-4">No. Agenda</th>
-                  <th className="py-3 px-4">Surat & Tanggal</th>
-                  <th className="py-3 px-4">Pengirim (OPD)</th>
-                  <th className="py-3 px-4">Perihal</th>
-                  <th className="py-3 px-4">Bidang</th>
-                  <th className="py-3 px-4">Sifat</th>
-                  <th className="py-3 px-4">Status Alur</th>
-                  <th className="py-3 px-4 text-center">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {suratList.map((item) => {
-                  const statusInfo = getStatusInfo(item.status);
-                  const sifatInfo = getSifatBadge(item.sifat);
+          <>
+            {/* Mobile Cards View (Visible on mobile screens) */}
+            <div className="md:hidden divide-y divide-slate-100">
+              {suratList.map((item) => {
+                const statusInfo = getStatusInfo(item.status);
+                const sifatInfo = getSifatBadge(item.sifat);
 
-                  return (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-primary whitespace-nowrap">
+                return (
+                  <div key={item.id} className="p-4 hover:bg-slate-50/80 transition-colors space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
                         {item.no_agenda}
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <p className="font-semibold text-slate-900">{item.no_surat}</p>
-                        <p className="text-[11px] text-slate-400 mt-0.5">
-                          Tgl: {formatDateIndo(item.tanggal_surat)}
-                        </p>
-                      </td>
-                      <td className="py-3.5 px-4 font-medium text-slate-800 max-w-[160px] truncate" title={item.opd_asal}>
-                        {item.opd_asal}
-                      </td>
-                      <td className="py-3.5 px-4 max-w-[240px] truncate text-slate-700" title={item.perihal}>
-                        {item.perihal}
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className="font-semibold text-slate-700">
-                          {getBidangShortLabel(item.bidang_tujuan)}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase border ${sifatInfo.bg}`}>
-                          {sifatInfo.label}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <Badge dotColor={statusInfo.dot} className={statusInfo.bg}>
-                          {statusInfo.label}
-                        </Badge>
-                      </td>
-                      <td className="py-3.5 px-4 whitespace-nowrap text-center">
-                        <div className="flex items-center justify-center gap-1.5">
-                          <Link to={`/surat-masuk/${item.id}`} title="Lihat Detail & Dokumen">
-                            <Button variant="outline" size="sm" icon={Eye}>
-                              Detail
-                            </Button>
-                          </Link>
+                      </span>
+                      <Badge dotColor={statusInfo.dot} className={statusInfo.bg}>
+                        {statusInfo.label}
+                      </Badge>
+                    </div>
 
-                          <a
-                            href={getCetakDisposisiUrl(item.id)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Cetak Lembar Disposisi"
-                            className="p-1.5 text-slate-600 hover:text-primary hover:bg-slate-100 rounded transition-colors"
-                          >
-                            <Printer className="w-4 h-4" />
-                          </a>
+                    <div>
+                      <p className="font-semibold text-slate-900 text-xs leading-snug">{item.perihal}</p>
+                      <p className="text-[11px] text-slate-500 mt-1">
+                        <span className="font-medium text-slate-700">{item.opd_asal}</span> • No. {item.no_surat}
+                      </p>
+                    </div>
 
-                          {user?.role === 'admin' && (
-                            <button
-                              onClick={() => handleDelete(item.id, item.no_agenda)}
-                              title="Hapus Surat (Soft Delete)"
-                              aria-label="Hapus Surat"
-                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
+                    <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <span className="px-2 py-0.5 rounded bg-slate-100 font-semibold text-slate-700">
+                        {getBidangShortLabel(item.bidang_tujuan)}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded font-bold uppercase border ${sifatInfo.bg}`}>
+                        {sifatInfo.label}
+                      </span>
+                      <span className="text-slate-400">
+                        {formatDateIndo(item.tanggal_surat)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
+                      <Link to={`/surat-masuk/${item.id}`} className="flex-1">
+                        <Button variant="primary" size="sm" icon={Eye} className="w-full justify-center text-xs py-1.5">
+                          Buka Detail
+                        </Button>
+                      </Link>
+
+                      <a
+                        href={getCetakDisposisiUrl(item.id)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 text-slate-600 hover:text-primary hover:bg-slate-100 rounded-btn border border-slate-200 transition-colors shrink-0"
+                        title="Cetak Disposisi"
+                      >
+                        <Printer className="w-4 h-4" />
+                      </a>
+
+                      {user?.role === 'admin' && (
+                        <button
+                          onClick={() => handleDelete(item.id, item.no_agenda)}
+                          title="Hapus Surat"
+                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-btn border border-slate-200 transition-colors shrink-0"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table View (Visible on tablet and desktop screens) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                    <th className="py-3 px-4">No. Agenda</th>
+                    <th className="py-3 px-4">Surat & Tanggal</th>
+                    <th className="py-3 px-4">Pengirim (OPD)</th>
+                    <th className="py-3 px-4">Perihal</th>
+                    <th className="py-3 px-4">Bidang</th>
+                    <th className="py-3 px-4">Sifat</th>
+                    <th className="py-3 px-4">Status Alur</th>
+                    <th className="py-3 px-4 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {suratList.map((item) => {
+                    const statusInfo = getStatusInfo(item.status);
+                    const sifatInfo = getSifatBadge(item.sifat);
+
+                    return (
+                      <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-primary whitespace-nowrap">
+                          {item.no_agenda}
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <p className="font-semibold text-slate-900">{item.no_surat}</p>
+                          <p className="text-[11px] text-slate-400 mt-0.5">
+                            Tgl: {formatDateIndo(item.tanggal_surat)}
+                          </p>
+                        </td>
+                        <td className="py-3.5 px-4 font-medium text-slate-800 max-w-[160px] truncate" title={item.opd_asal}>
+                          {item.opd_asal}
+                        </td>
+                        <td className="py-3.5 px-4 max-w-[240px] truncate text-slate-700" title={item.perihal}>
+                          {item.perihal}
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span className="font-semibold text-slate-700">
+                            {getBidangShortLabel(item.bidang_tujuan)}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase border ${sifatInfo.bg}`}>
+                            {sifatInfo.label}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <Badge dotColor={statusInfo.dot} className={statusInfo.bg}>
+                            {statusInfo.label}
+                          </Badge>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <Link to={`/surat-masuk/${item.id}`} title="Lihat Detail & Dokumen">
+                              <Button variant="outline" size="sm" icon={Eye}>
+                                Detail
+                              </Button>
+                            </Link>
+
+                            <a
+                              href={getCetakDisposisiUrl(item.id)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="Cetak Lembar Disposisi"
+                              className="p-1.5 text-slate-600 hover:text-primary hover:bg-slate-100 rounded transition-colors"
                             >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                              <Printer className="w-4 h-4" />
+                            </a>
+
+                            {user?.role === 'admin' && (
+                              <button
+                                onClick={() => handleDelete(item.id, item.no_agenda)}
+                                title="Hapus Surat (Soft Delete)"
+                                aria-label="Hapus Surat"
+                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {/* Pagination Bar */}
         {meta.total > meta.per_page && (
-          <div className="px-4 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+          <div className="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
             <span>
               Menampilkan {meta.from || 0} - {meta.to || 0} dari total {meta.total} surat
             </span>

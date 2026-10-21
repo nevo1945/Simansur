@@ -27,10 +27,10 @@ export default function PdfViewer({ filePath, title = 'Pratinjau Dokumen Scan' }
 
   return (
     <div className={`flex flex-col bg-slate-900 rounded-card border border-slate-800 overflow-hidden shadow-gov transition-all ${
-      isFullscreen ? 'fixed inset-4 z-50 rounded-none' : 'h-[650px] w-full'
+      isFullscreen ? 'fixed inset-2 sm:inset-4 z-50 rounded-none' : 'h-[420px] sm:h-[540px] lg:h-[650px] w-full'
     }`}>
       {/* Viewer Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-800 text-slate-200 border-b border-slate-700 select-none">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-slate-800 text-slate-200 border-b border-slate-700 select-none gap-2 overflow-x-auto">
         <div className="flex items-center gap-2 truncate max-w-[45%]">
           <FileText className="w-4 h-4 text-accent shrink-0" />
           <span className="text-xs font-semibold truncate">{title}</span>
