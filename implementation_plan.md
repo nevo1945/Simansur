@@ -242,9 +242,9 @@ stateDiagram-v2
 - Terapkan model Eloquent dengan cast, relasi, query scopes, dan soft delete.
 - Buat seeder akun default:
   - **Admin**: `username: admin`, `nip: 198001012005011001`, `nama: Administrator Sistem`
-  - **Kabid**: `username: kabid.aset`, `nip: 197508121998031002`, `nama: Drs. H. Ahmad Fauzi, M.Si`
-  - **Kasubid Inventarisasi**: `username: kasubid.inv`, `nip: 198203152006041005`, `nama: Budi Santoso, S.STP`
-  - **Kasubid Keamanan**: `username: kasubid.keam`, `nip: 198406202008011003`, `nama: Hendra Wijaya, S.E`
+  - **Kabid**: `username: kabid`, `nip: 197508121998031002`, `nama: Syafri Annur Aziz, S.H.`
+  - **Kasubid IPA**: `username: kasubid.ipa`, `nip: 198203152006041005`, `nama: Frima Boby Fatria, S.T.`
+  - **Kasubid P3A**: `username: kasubid.p3a`, `nip: 198406202008011003`, `nama: Hafid Hartamiarno, S.STP`
   - **Staff Inventarisasi**: `username: staff.inv`, `nip: 199201102015031002`, `nama: Siti Rahmawati, S.Tr.A.P`
   - **Staff Keamanan**: `username: staff.keam`, `nip: 199407252019021004`, `nama: Rian Pratama, A.Md`
   - Password default semua akun: `password123`

@@ -210,8 +210,8 @@
                 <p style="margin:0;">Pekanbaru, {{ date('d F Y') }}<br>Kepala Bidang Aset,</p>
                 <div style="height: 48px;"></div>
                 <p style="margin:0;">
-                    <b>Drs. H. Ahmad Fauzi, M.Si</b><br>
-                    NIP. 19750812 199803 1 002
+                    <b>{{ isset($kabid) && $kabid ? $kabid->nama_lengkap : 'Syafri Annur Aziz, S.H.' }}</b><br>
+                    NIP. {{ isset($kabid) && $kabid ? $kabid->nip : '19750812 199803 1 002' }}
                 </p>
             </td>
         </tr>

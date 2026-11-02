@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
         $defaultPassword = Hash::make('password123');
 
         // 1. Admin
-        $admin = User::firstOrCreate(
+        $admin = User::updateOrCreate(
             ['username' => 'admin'],
             [
                 'nama_lengkap' => 'Administrator Sistem',
@@ -30,10 +30,10 @@ class UserSeeder extends Seeder
         );
 
         // 2. Kabid
-        $kabid = User::firstOrCreate(
+        $kabid = User::updateOrCreate(
             ['username' => 'kabid'],
             [
-                'nama_lengkap' => 'Drs. H. Ahmad Fauzi, M.Si',
+                'nama_lengkap' => 'Syafri Annur Aziz, S.H.',
                 'nip' => '197508121998031002',
                 'email' => 'kabid.aset@bpkad.pekanbaru.go.id',
                 'password' => $defaultPassword,
@@ -45,10 +45,10 @@ class UserSeeder extends Seeder
         );
 
         // 3. Kasubid IPA (Inventarisasi dan Penghapusan Aset)
-        $kasubidIpa = User::firstOrCreate(
+        $kasubidIpa = User::updateOrCreate(
             ['username' => 'kasubid.ipa'],
             [
-                'nama_lengkap' => 'Budi Santoso, S.STP',
+                'nama_lengkap' => 'Frima Boby Fatria, S.T.',
                 'nip' => '198203152006041005',
                 'email' => 'kasubid.ipa@bpkad.pekanbaru.go.id',
                 'password' => $defaultPassword,
@@ -60,10 +60,10 @@ class UserSeeder extends Seeder
         );
 
         // 4. Kasubid P3A (Pemanfaatan, Penggunaan, dan Pengamanan Aset)
-        $kasubidP3a = User::firstOrCreate(
+        $kasubidP3a = User::updateOrCreate(
             ['username' => 'kasubid.p3a'],
             [
-                'nama_lengkap' => 'Hendra Wijaya, S.E',
+                'nama_lengkap' => 'Hafid Hartamiarno, S.STP',
                 'nip' => '198406202008011003',
                 'email' => 'kasubid.p3a@bpkad.pekanbaru.go.id',
                 'password' => $defaultPassword,
@@ -75,7 +75,7 @@ class UserSeeder extends Seeder
         );
 
         // 5. Staff IPA (Inventarisasi dan Penghapusan Aset)
-        $staffIpa = User::firstOrCreate(
+        $staffIpa = User::updateOrCreate(
             ['username' => 'staff.ipa'],
             [
                 'nama_lengkap' => 'Siti Rahmawati, S.Tr.A.P',
@@ -90,7 +90,7 @@ class UserSeeder extends Seeder
         );
 
         // 6. Staff P3A (Pemanfaatan, Penggunaan, dan Pengamanan Aset)
-        $staffP3a = User::firstOrCreate(
+        $staffP3a = User::updateOrCreate(
             ['username' => 'staff.p3a'],
             [
                 'nama_lengkap' => 'Rian Pratama, A.Md',

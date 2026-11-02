@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\SuratMasuk;
 use App\Models\SuratKeluar;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Services\ExcelExportService;
@@ -110,6 +111,7 @@ class LaporanController extends Controller
         $html = view('exports.laporan_surat_masuk', [
             'items' => $items,
             'user' => $user,
+            'kabid' => User::where('role', 'kabid')->first(),
             'startDate' => $request->start_date ? date('d/m/Y', strtotime($request->start_date)) : date('01/m/Y'),
             'endDate' => $request->end_date ? date('d/m/Y', strtotime($request->end_date)) : date('d/m/Y'),
         ])->render();
@@ -147,6 +149,7 @@ class LaporanController extends Controller
         $html = view('exports.laporan_surat_keluar', [
             'items' => $items,
             'user' => $user,
+            'kabid' => User::where('role', 'kabid')->first(),
             'startDate' => $request->start_date ? date('d/m/Y', strtotime($request->start_date)) : date('01/m/Y'),
             'endDate' => $request->end_date ? date('d/m/Y', strtotime($request->end_date)) : date('d/m/Y'),
         ])->render();

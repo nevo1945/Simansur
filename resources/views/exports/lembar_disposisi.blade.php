@@ -330,7 +330,7 @@
                 <p style="margin:0;">Pekanbaru, {{ date('d F Y') }}<br>Kepala Bidang Aset,</p>
                 <div style="height: 48px;"></div>
                 <p style="margin:0;">
-                    <b>{{ $surat->approver ? $surat->approver->nama_lengkap : 'Drs. H. Ahmad Fauzi, M.Si' }}</b><br>
+                    <b>{{ $surat->approver ? $surat->approver->nama_lengkap : 'Syafri Annur Aziz, S.H.' }}</b><br>
                     NIP. {{ $surat->approver ? $surat->approver->nip : '19750812 199803 1 002' }}
                 </p>
             </td>

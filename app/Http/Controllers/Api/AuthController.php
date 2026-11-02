@@ -18,7 +18,13 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::where(function ($query) use ($request) {
+            $input = $request->username;
+            $altInput = str_contains($input, '_') ? str_replace('_', '.', $input) : str_replace('.', '_', $input);
+            $query->where('username', $input)
+                ->orWhere('username', $altInput)
+                ->orWhere('nip', $input);
+        })->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
