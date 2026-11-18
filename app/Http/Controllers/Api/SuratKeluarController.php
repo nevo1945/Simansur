@@ -88,7 +88,7 @@ class SuratKeluarController extends Controller
             'opd_tujuan' => 'required|string|max:255',
             'perihal' => 'required|string',
             'sifat' => ['required', Rule::in(['biasa', 'penting', 'segera', 'rahasia'])],
-            'jenis_dokumen' => ['required', Rule::in(['surat', 'berita_acara', 'bast'])],
+            'jenis_dokumen' => ['required', Rule::in(['semua', 'surat', 'berita_acara', 'bast'])],
             'keterangan' => 'nullable|string',
             'file_scan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:20480',
         ], [

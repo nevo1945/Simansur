@@ -17,7 +17,7 @@ const formSchema = z.object({
   opd_tujuan: z.string().min(1, 'Instansi / OPD tujuan wajib diisi'),
   perihal: z.string().min(3, 'Perihal minimal 3 karakter'),
   sifat: z.enum(['biasa', 'penting', 'segera', 'rahasia']),
-  jenis_dokumen: z.enum(['surat', 'berita_acara', 'bast']),
+  jenis_dokumen: z.enum(['semua', 'surat', 'berita_acara', 'bast']),
   keterangan: z.string().optional(),
 });
 
@@ -167,6 +167,7 @@ export default function SuratKeluarForm() {
               error={errors.jenis_dokumen?.message}
               {...register('jenis_dokumen')}
             >
+              <option value="semua">Semua</option>
               <option value="surat">Surat Dinas Biasa</option>
               <option value="berita_acara">Berita Acara (BA)</option>
               <option value="bast">BAST (Berita Acara Serah Terima)</option>

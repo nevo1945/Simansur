@@ -171,6 +171,7 @@ export default function SuratKeluarList() {
             className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-input focus:bg-white focus:border-secondary focus:outline-none"
           >
             <option value="">Semua Jenis Dokumen</option>
+            <option value="semua">Semua</option>
             <option value="surat">Surat Biasa</option>
             <option value="berita_acara">Berita Acara (BA)</option>
             <option value="bast">BAST (Serah Terima)</option>

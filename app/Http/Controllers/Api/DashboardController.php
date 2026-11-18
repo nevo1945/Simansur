@@ -108,6 +108,7 @@ class DashboardController extends Controller
         ];
 
         $distribusiJenisKeluar = [
+            'semua' => SuratKeluar::where('jenis_dokumen', 'semua')->count(),
             'surat' => SuratKeluar::where('jenis_dokumen', 'surat')->count(),
             'berita_acara' => SuratKeluar::where('jenis_dokumen', 'berita_acara')->count(),
             'bast' => SuratKeluar::where('jenis_dokumen', 'bast')->count(),
